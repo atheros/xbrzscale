@@ -2,6 +2,7 @@ xBRZ upscaling commandline tool
 ===============================
 
 Copyright (c) 2014 Przemysław Grzywacz <nexather@gmail.com>
+
 This file is part of xbrzscale.
 
 xbrzscale is free software: you can redistribute it and/or modify
@@ -60,9 +61,9 @@ Usage
 
 	`xbrztool scale_factor input_image output_image`
 
-`scale_factor` - Controls how much your image should be scaled. It should be an integer between 2 and 5 (inclusive).
-`input_image` - Input image is the filename of the image you want to scale. Image format can be anything that SDL_image supports.
-`output_image` - Filename where the scaled image should be saved. The only supported format is PNG!
+* `scale_factor` - Controls how much your image should be scaled. It should be an integer between 2 and 5 (inclusive).
+* `input_image` - Input image is the filename of the image you want to scale. Image format can be anything that SDL_image supports.
+* `output_image` - Filename where the scaled image should be saved. The only supported format is PNG!
 
 Please note I only tested the scaling on 32bit RGBA PNGs, I have no idea if this will work with 8bit indexed images.
 
