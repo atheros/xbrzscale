@@ -25,6 +25,9 @@ Overview
 
 This tool allows you to scale your graphics with xBRZ algorithm, see http://en.wikipedia.org/wiki/Image_scaling#xbr_family
 
+This is an example of what xBRZ can do:
+
+![Example of xBRZ](http://en.wikipedia.org/wiki/File:HQx-xBRZ-comparison.png)
 
 
 External code
