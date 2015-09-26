@@ -14,7 +14,7 @@ xbrzscale.o: xbrzscale.cpp SDL_imagesave/IMG_savepng.h xbrz/xbrz.h
 
 SDL_imagesave/IMG_savepng.o:
 xbrzscale: xbrzscale.o SDL_imagesave/IMG_savepng.o xbrz/xbrz.o
-	g++ -o xbrzscale xbrzscale.o SDL_imagesave/IMG_savepng.o xbrz/xbrz.o -lSDL_image `sdl-config --libs`
+	g++ -o xbrzscale xbrzscale.o SDL_imagesave/IMG_savepng.o xbrz/xbrz.o -lpng12 -lSDL_image `sdl-config --libs`
 
 clean:
 	rm -f xbrzscale.o xbrz/xbrz.o SDL_imagesave/IMG_savepng.o xbrzscale
