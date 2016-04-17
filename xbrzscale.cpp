@@ -21,12 +21,7 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
-
-
 #include "xbrz/xbrz.h"
-//#include "savepng.h"
-#include "SDL_imagesave/IMG_savepng.h"
-
 
 inline Uint32 SDL_GetPixel(SDL_Surface *surface, int x, int y)
 {
@@ -131,7 +126,7 @@ void displayImage(SDL_Surface* surface, const char* message) {
 int main(int argc, char* argv[]) {
 	if (argc != 4) {
 		fprintf(stderr, "usage: xbrzscale scale_factor input_image output_image\n");
-		fprintf(stderr, "scale_factor can be between 2 and 5\n");
+		fprintf(stderr, "scale_factor can be between 2 and 6\n");
 		return 1;
 	}
 	
@@ -139,8 +134,8 @@ int main(int argc, char* argv[]) {
 	char* in_file = argv[2];
 	char* out_file = argv[3];
 	
-	if (scale < 2 || scale > 5) {
-		fprintf(stderr, "scale_factor must be between 2 and 5 (inclusive), got %i\n", scale);
+	if (scale < 2 || scale > 6) {
+		fprintf(stderr, "scale_factor must be between 2 and 6 (inclusive), got %i\n", scale);
 		return 1;
 	}
 	
@@ -190,7 +185,7 @@ int main(int argc, char* argv[]) {
 	printf("Scaling image...\n");
 	uint32_t* dest = new uint32_t[dst_width * dst_height];
 	
-	xbrz::scale(scale, in_data, dest, src_width, src_height);
+	xbrz::scale(scale, in_data, dest, src_width, src_height,xbrz::ColorFormat::ARGB);
 	delete [] in_data;
 	
 	printf("Saving image...\n");
@@ -216,17 +211,11 @@ int main(int argc, char* argv[]) {
 //			SDL_PutPixel(dst_img, x, y, (a || r || g || b) ? 0xffffffffU : 0);
 			offset++;
 		}
-//		fprintf(stdout, "\n");
 	}
 
 //	displayImage(dst_img, "Image after color conversion");
 
-	/*
-	if (SDL_SavePNG(dst_img, out_file) != 0) {
-		fprintf(stderr, "Failed to save output image: %s\n", SDL_GetError());
-		return 1;
-	}*/
-	IMG_SavePNG(out_file, dst_img, -1);
+	IMG_SavePNG(dst_img,out_file);
 	
 	SDL_FreeSurface(dst_img);
 	
