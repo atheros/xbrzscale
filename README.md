@@ -35,7 +35,7 @@ External code
 
 The following external code is included in this repository:
 
-* http://sourceforge.net/projects/hqmame/files/ - xBRZ implementation
+* https://sourceforge.net/projects/xbrz/files/xBRZ/ - xBRZ implementation
 
 Dependencies
 ------------
