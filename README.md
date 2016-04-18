@@ -27,7 +27,7 @@ This tool allows you to scale your graphics with xBRZ algorithm, see http://en.w
 
 This is an example of what xBRZ can do:
 
-![Example of xBRZ](http://en.wikipedia.org/wiki/File:HQx-xBRZ-comparison.png)
+![Example of xBRZ](https://upload.wikimedia.org/wikipedia/commons/6/6c/HQx-xBRZ-comparison.png)
 
 
 External code
@@ -35,28 +35,29 @@ External code
 
 The following external code is included in this repository:
 
-* http://sourceforge.net/projects/hqmame/files/ - xBRZ implementation
-* https://github.com/TheWatcher/SDL_imagesave - PNG saving
-
+* https://sourceforge.net/projects/xbrz/files/xBRZ/ - xBRZ implementation
 
 Dependencies
 ------------
 
 The following dependencies are needed to compile xbrzscale:
 
-* libsdl1.2-dev
-* libpng12-dev
-* libsdl-image1.2-dev
+* libsdl2-dev
+* libsdl2-image-dev
+
+Under OSX they can be installed using macports
+
+* port install libsdl2_image
+* port install libsdl2
 
 Mabe some additional libraries are needed. I'm sure you'll figure it out.
-
 
 Compiling
 ---------
 
 Just run `make` and you should end up with a binary called `xbrzscale`.
 
-The makefile will probably work only on linux, but it is simple enough to be ported to other platforms.
+The makefile will probably work only on linux and OSX, but it is simple enough to be ported to other platforms.
 
 
 Usage
