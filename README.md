@@ -50,7 +50,10 @@ Under OSX they can be installed using macports
 * port install libsdl2_image
 * port install libsdl2
 
-Mabe some additional libraries are needed. I'm sure you'll figure it out.
+Some additional libraries are needed. I'm sure you'll figure it out.
+
+If you need SDL1.2 support, check sdl1.2 git branch.
+
 
 Compiling
 ---------
