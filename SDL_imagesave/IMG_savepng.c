@@ -38,6 +38,7 @@ extern "C" {
 #endif
 
 #include <stdlib.h>
+#include <zlib.h>
 #include <png.h>
 #include <IMG_savepng.h>
 #include <IMG_saveend.h>
