@@ -3,11 +3,20 @@ all: xbrzscale
 xbrz/xbrz.o: xbrz/xbrz.cpp xbrz/xbrz.h
 	g++ -std=c++11 -c -o xbrz/xbrz.o xbrz/xbrz.cpp -DNDEBUG
 
-xbrzscale.o: xbrzscale.cpp xbrz/xbrz.h
+libxbrzscale.o: libxbrzscale.cpp xbrz/xbrz.h
+	g++ -std=c++11 -c -o libxbrzscale.o libxbrzscale.cpp `sdl2-config --cflags`
+
+xbrzscale.o: xbrzscale.cpp libxbrzscale.h xbrz/xbrz.h
 	g++ -std=c++11 -c -o xbrzscale.o xbrzscale.cpp `sdl2-config --cflags`
 
-xbrzscale: xbrzscale.o xbrz/xbrz.o
-	g++ -o xbrzscale xbrzscale.o xbrz/xbrz.o -lSDL2_image `sdl2-config --libs`
+libxbrzscale.a: libxbrzscale.o xbrz/xbrz.o
+	ar qc libxbrzscale.a libxbrzscale.o xbrz/xbrz.o
+
+xbrzscale: xbrzscale.o libxbrzscale.a
+	g++ -o xbrzscale xbrzscale.o libxbrzscale.a -lSDL2_image `sdl2-config --libs`
+#xbrzscale: xbrzscale.o libxbrzscale.o xbrz/xbrz.o
+#	g++ -o xbrzscale xbrzscale.o libxbrzscale.o xbrz/xbrz.o -lSDL2_image `sdl2-config --libs`
 
 clean:
-	rm -f xbrzscale.o xbrz/xbrz.o xbrzscale
+	rm -vf xbrzscale.o xbrz/xbrz.o libxbrzscale.o libxbrzscale.a xbrzscale
+	
