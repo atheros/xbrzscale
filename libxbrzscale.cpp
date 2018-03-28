@@ -23,16 +23,19 @@
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_surface.h>
 #include <cstdio>
+#include <iostream>
+#include <vector>
 
 #include "xbrz/xbrz.h"
 
-//#include <cstdio>
-//#include <cstdint>
-//#include "SDL.h"
-//#include "SDL_image.h"
-//#include "xbrz/xbrz.h"
-
 bool libxbrzscale::bEnableOutput=false;
+
+bool libxbrzscale::bDbgMsg=false;
+
+bool libxbrzscale::bUseCache=false;
+
+bool libxbrzscale::bFreeInputSurfaceAfterScale=true;
+bool libxbrzscale::bFreeOutputSurfaceAfterScale=true;
 
 Uint32 libxbrzscale::SDL_GetPixel(SDL_Surface *surface, int x, int y)
 {
@@ -96,6 +99,7 @@ void libxbrzscale::SDL_PutPixel(SDL_Surface *surface, int x, int y, Uint32 pixel
 
 
 SDL_Surface* libxbrzscale::createARGBSurface(int w, int h) {
+  if(bDbgMsg)printf("Creating SDL RGB surface w=%d h=%d\n",w,h);
   return SDL_CreateRGBSurface(0, w, h, 32, 0xff0000U, 0xff00U, 0xffU, 0xff000000U);
 }
 
@@ -134,8 +138,30 @@ void displayImage(SDL_Surface* surface, const char* message) {
 }
 */
 
+struct imgUint32{
+  uint32_t *data;
+  int iW;
+  int iH;
+};
+std::vector<imgUint32> vImgUint32Cache;
+imgUint32 ImgUint32Cache(int iW,int iH){ //as that memory deletion wont happen promptly, it may consume too much memory too fast unnecessarily becoming a bottle neck on performance
+  for(int i=0;i<vImgUint32Cache.size();i++){
+    if(vImgUint32Cache[i].iW==iW && vImgUint32Cache[i].iH==iH){
+      return vImgUint32Cache[i];
+    }
+  }
+
+  if(libxbrzscale::isDbgMsg())std::cout<<"Cache not found for w="<<iW<<" h="<<iH<<std::endl;
+  imgUint32 imgui32={new uint32_t[iW*iH],iW,iH};
+
+  vImgUint32Cache.push_back(imgui32);
+  if(libxbrzscale::isDbgMsg())std::cout<<"Cache size="<<vImgUint32Cache.size()<<std::endl;
+
+  return imgui32;
+}
+
 uint32_t* libxbrzscale::surfaceToUint32(SDL_Surface* img){
-  uint32_t *data = new uint32_t[img->w * img->h];
+  uint32_t *data = ImgUint32Cache(img->w,img->h).data;
 
   int x, y, offset=0;
   Uint8 r, g, b, a;
@@ -180,29 +206,48 @@ void libxbrzscale::uint32toSurface(uint32_t* ui32src, SDL_Surface* dst_img){
 }
 
 SDL_Surface* libxbrzscale::scale(SDL_Surface* src_img, int scale){
+  return libxbrzscale::scale(NULL, src_img, scale);
+}
+/**
+ * dst_img if not null may be re-used, and is also returned
+ */
+SDL_Surface* libxbrzscale::scale(SDL_Surface* dst_imgCache, SDL_Surface* src_img, int scale){
+  if(scale<2 || scale>6){std::cerr<<"invalid stretch value min=2, max=6, requested="<<scale<<std::endl;exit(1);}
+
   int src_width = src_img->w;
   int src_height = src_img->h;
   int dst_width = src_width * scale;
   int dst_height = src_height * scale;
 
   uint32_t *in_data = surfaceToUint32(src_img);
-  SDL_FreeSurface(src_img);
+  if(bFreeInputSurfaceAfterScale && src_img!=NULL && src_img->refcount>0){
+    SDL_FreeSurface(src_img); //previous INPUT surface
+    src_img=NULL; //just to prevent future troubles here, but pointless outside here
+  }
 
   if(bEnableOutput)printf("Scaling image...\n");
-  uint32_t* dest = new uint32_t[dst_width * dst_height];
+  uint32_t* dest = ImgUint32Cache(dst_width,dst_height).data;
 
   xbrz::scale(scale, in_data, dest, src_width, src_height, xbrz::ColorFormat::ARGB);
-  delete [] in_data;
+  if(!bUseCache)delete [] in_data;
 
   if(bEnableOutput)printf("Saving image...\n");
-  SDL_Surface* dst_img = createARGBSurface(dst_width, dst_height);
-  if (!dst_img) {
-    delete [] dest;
+
+  if(dst_imgCache==NULL || dst_imgCache->w!=dst_width || dst_imgCache->h!=dst_height || dst_imgCache->refcount==0){
+    if(bFreeOutputSurfaceAfterScale && dst_imgCache!=NULL && dst_imgCache->refcount>0){
+      SDL_FreeSurface(dst_imgCache); //previous OUTPUT surface
+    }
+
+    dst_imgCache = createARGBSurface(dst_width, dst_height);
+  }
+
+  if (!dst_imgCache) {
+    if(!bUseCache)delete [] dest;
     if(bEnableOutput)fprintf(stderr, "Failed to create SDL surface: %s\n", SDL_GetError());
     return NULL;
   }
 
-  uint32toSurface(dest,dst_img);
+  uint32toSurface(dest,dst_imgCache);
 
-  return dst_img;
+  return dst_imgCache;
 }
