@@ -18,13 +18,23 @@
 
 #include "libxbrzscale.h"
 
+#include <cstdio>
+#include <iostream>
+#include <vector>
+
+#ifndef XBRZLIB_RELATIVEPATHSDL
+//#include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_endian.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_surface.h>
-#include <cstdio>
-#include <iostream>
-#include <vector>
+#else
+//#include "SDL.h"
+#include "SDL_endian.h"
+#include "SDL_error.h"
+#include "SDL_pixels.h"
+#include "SDL_surface.h"
+#endif
 
 #include "xbrz/xbrz.h"
 
@@ -37,7 +47,10 @@ bool libxbrzscale::bUseCache=false;
 bool libxbrzscale::bFreeInputSurfaceAfterScale=true;
 bool libxbrzscale::bFreeOutputSurfaceAfterScale=true;
 
-inline Uint32 libxbrzscale::SDL_GetPixel(SDL_Surface *surface, int x, int y)
+#ifndef XBRZLIB_NOINLINEGETSETPIX //this may be required to let some compillers linking actually work w/o error: "undefined reference to" these
+inline
+#endif
+Uint32 libxbrzscale::SDL_GetPixel(SDL_Surface *surface, int x, int y)
 {
     int bpp = surface->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to retrieve */
@@ -64,7 +77,10 @@ inline Uint32 libxbrzscale::SDL_GetPixel(SDL_Surface *surface, int x, int y)
     }
 }
 
-inline void libxbrzscale::SDL_PutPixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
+#ifndef XBRZLIB_NOINLINEGETSETPIX //this may be required to let some compillers linking actually work w/o error: "undefined reference to" these
+inline
+#endif
+void libxbrzscale::SDL_PutPixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 {
     int bpp = surface->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to set */
