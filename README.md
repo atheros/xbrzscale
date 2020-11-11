@@ -1,7 +1,7 @@
 xBRZ upscaling commandline tool
 ===============================
 
-Copyright (c) 2014 Przemysław Grzywacz <nexather@gmail.com>
+Copyright (c) 2020 Przemysław Grzywacz <nexather@gmail.com>
 
 This file is part of xbrzscale.
 
@@ -23,11 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Overview
 --------
 
-This tool allows you to scale your graphics with xBRZ algorithm, see http://en.wikipedia.org/wiki/Image_scaling#xbr_family
-
-This is an example of what xBRZ can do:
-
-![Example of xBRZ](https://upload.wikimedia.org/wikipedia/commons/6/6c/HQx-xBRZ-comparison.png)
+This tool allows you to scale your graphics with xBRZ algorithm, see https://en.wikipedia.org/wiki/Pixel-art_scaling_algorithms#xBR_family
 
 
 External code
