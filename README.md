@@ -41,6 +41,11 @@ The following dependencies are needed to compile xbrzscale:
 * libsdl2-dev
 * libsdl2-image-dev
 
+On Windows said dependencies can be installed by doing the following:
+
+* [libsd12](https://lazyfoo.net/tutorials/SDL/01_hello_SDL/windows/mingw/index.php)
+* libsd12-image is done following the same process [with this download instead](https://www.libsdl.org/projects/SDL_image/)
+
 Under OSX they can be installed using macports
 
 * port install libsdl2_image
@@ -54,10 +59,13 @@ If you need SDL1.2 support, check sdl1.2 git branch.
 Compiling
 ---------
 
-Just run `make` and you should end up with a binary called `xbrzscale`.
+For Mac and Linux:
 
-The makefile will probably work only on linux and OSX, but it is simple enough to be ported to other platforms.
+run `make` and you should end up with a binary called `xbrzscale`.
 
+For Windows:
+
+run `mingw32-make -f Makefile-win` and you should end up with a binary called `xbrzscale.exe`
 
 Usage
 -----
