@@ -13,7 +13,7 @@ libxbrzscale.a: libxbrzscale.o xbrz/xbrz.o
 	ar qc libxbrzscale.a libxbrzscale.o xbrz/xbrz.o
 
 xbrzscale: xbrzscale.o libxbrzscale.a
-	g++ -o xbrzscale xbrzscale.o libxbrzscale.a -lSDL2_image -lSDL2main -lSDL2 -lSDL2_image -lmingw32
+	g++ -o xbrzscale xbrzscale.o libxbrzscale.a -lmingw32 -lSDL2_image -lSDL2main -lSDL2
 
 clean:
 	rm -vf xbrzscale.o xbrz/xbrz.o libxbrzscale.o libxbrzscale.a xbrzscale
