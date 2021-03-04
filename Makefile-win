@@ -1,19 +1,19 @@
 all: xbrzscale
 
 xbrz/xbrz.o: xbrz/xbrz.cpp xbrz/xbrz.h
-	g++ -std=c++17 -c -o xbrz/xbrz.o xbrz/xbrz.cpp -DNDEBUG -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+	g++ -std=c++17 -c -o xbrz/xbrz.o xbrz/xbrz.cpp
 
 libxbrzscale.o: libxbrzscale.cpp xbrz/xbrz.h
 	g++ -std=c++17 -c -o libxbrzscale.o libxbrzscale.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 
 xbrzscale.o: xbrzscale.cpp libxbrzscale.h xbrz/xbrz.h
-	g++ -std=c++17 -c -o xbrzscale.o xbrzscale.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+	g++ -std=c++17 -c -o xbrzscale.o xbrzscale.cpp
 
 libxbrzscale.a: libxbrzscale.o xbrz/xbrz.o
 	ar qc libxbrzscale.a libxbrzscale.o xbrz/xbrz.o
 
 xbrzscale: xbrzscale.o libxbrzscale.a
-	g++ -o xbrzscale xbrzscale.o libxbrzscale.a -lmingw32 -lSDL2_image -lSDL2main -lSDL2
+	g++ -o xbrzscale xbrzscale.o libxbrzscale.a -lmingw32 -lSDL2_image -lSDL2main -lSDL2 -static-libgcc -static-libstdc++
 
 clean:
-	rm -vf xbrzscale.o xbrz/xbrz.o libxbrzscale.o libxbrzscale.a xbrzscale
+	del xbrzscale.o xbrz\xbrz.o libxbrzscale.o libxbrzscale.a
