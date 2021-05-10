@@ -16,20 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef XBRZLIB_RELATIVEPATHSDL
 #include <SDL2/SDL_stdinc.h>
+#else
+#include "SDL_stdinc.h"
+#endif
 
 struct SDL_Surface;
 
 class libxbrzscale
 {
  public:
-  static inline Uint32 SDL_GetPixel(SDL_Surface *surface, int x, int y);
-  static inline void SDL_PutPixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
+  static Uint32 SDL_GetPixel(SDL_Surface *surface, int x, int y);
+  static void SDL_PutPixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
   static SDL_Surface* createARGBSurface(int w, int h);
   static SDL_Surface* scale(SDL_Surface* src_img,int scale);
-  static void setEnableOutput(bool b){bEnableOutput=true;};
-  static uint32_t* surfaceToUint32(SDL_Surface* img);
+  static SDL_Surface* scale(SDL_Surface* dst_imgCache,SDL_Surface* src_img,int scale);
+  static void setEnableOutput(bool b){bEnableOutput=b;};
+  static void setDebugMsg(bool b){bDbgMsg=b;};
+  static void setFreeSurfaceAfterScale(bool bInputSurface,bool bOutputSurface){
+    bFreeInputSurfaceAfterScale=bInputSurface;
+    bFreeOutputSurfaceAfterScale=bOutputSurface;
+  };
+  static void setUseCache(bool b){bUseCache=b;};
+  static uint32_t* surfaceToUint32(bool bIn, SDL_Surface* img);
   static void uint32toSurface(uint32_t* dest, SDL_Surface* dst_img);
+  static bool isDbgMsg(){return bDbgMsg;}
  private:
   static bool bEnableOutput;
+  static bool bDbgMsg;
+  static bool bUseCache;
+  static bool bFreeInputSurfaceAfterScale;
+  static bool bFreeOutputSurfaceAfterScale;
 };
